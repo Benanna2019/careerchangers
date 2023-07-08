@@ -94,7 +94,7 @@ function CollectLinkPopUp(props: CollectionLinkPopUpProps) {
             <DialogDescription>{props.content}</DialogDescription>
             <form
               style={{ opacity: !pending ? 1 : 0.7 }}
-              className="relative max-w-[500px] text-sm"
+              className=" max-w-[500px] text-sm"
               ref={formRef}
               action={async (formData) => {
                 await serverAction(formData, pathname)

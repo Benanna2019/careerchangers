@@ -63,8 +63,8 @@ export default function RootLayout({
         graphik.variable
       )}
     >
-      <body className="mx-4 mb-40 mt-8 flex max-w-2xl flex-col antialiased md:flex-row lg:mx-auto">
-        <main className="mt-6 flex min-w-0 flex-auto flex-col px-2 md:px-0">
+      <body className="mb-40 flex flex-col antialiased md:flex-row ">
+        <main className="mx-auto mt-8 flex max-w-2xl flex-auto flex-col px-2 md:px-0">
           <Sidebar />
           {children}
           {/* <Analytics /> */}

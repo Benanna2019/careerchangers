@@ -3,7 +3,6 @@ import avatar from 'app/avatar.jpg'
 import ViewCounter from 'app/blog/view-counter'
 import { getViewsCount } from 'lib/metrics'
 import hotairballoons from 'app/hotairballoons.jpg'
-import { Suspense } from 'react'
 
 function ArrowIcon() {
   return (
