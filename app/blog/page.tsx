@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { allBlogs } from 'contentlayer/generated'
 import ViewCounter from './view-counter'
 import { getViewsCount } from 'lib/metrics'
-import { TestDialog } from 'app/components/test-modal'
 
 export const metadata: Metadata = {
   title: 'Blog',
