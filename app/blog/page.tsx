@@ -14,7 +14,7 @@ export default async function BlogPage() {
 
   return (
     <section>
-      <h1 className="mb-8 text-2xl font-bold tracking-tighter">read my blog</h1>
+      <h1 className="mb-8 text-2xl font-bold tracking-tighter">cc blog</h1>
       {allBlogs
         .sort((a, b) => {
           if (new Date(a.publishedAt) > new Date(b.publishedAt)) {
