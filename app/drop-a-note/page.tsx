@@ -51,7 +51,7 @@ export default async function DropANotePage() {
   return (
     <section>
       <h1 className="mb-8 text-2xl font-bold tracking-tighter">
-        sign my guestbook
+        Request an article, ask a question, or just say hi.
       </h1>
       {session?.user ? (
         <>
