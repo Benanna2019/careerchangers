@@ -22,8 +22,8 @@ export async function generateMetadata({
     slug,
   } = post
   const ogImage = image
-    ? `https://careerchangers.co${image}`
-    : `https://careerchangers.co/og?title=${title}`
+    ? `https://careerchangers.guide${image}`
+    : `https://careerchangers.guide/og?title=${title}`
 
   return {
     title,
@@ -33,7 +33,7 @@ export async function generateMetadata({
       description,
       type: 'article',
       publishedTime,
-      url: `https://careerchangers.co/blog/${slug}`,
+      url: `https://careerchangers.guide/blog/${slug}`,
       images: [
         {
           url: ogImage,

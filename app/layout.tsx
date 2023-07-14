@@ -24,7 +24,7 @@ const graphik = localFont({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://careerchangers.co'),
+  metadataBase: new URL('https://careerchangers.guide'),
   title: {
     default: 'Career Changers',
     template: '%s | Career Changers',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Career Changers',
     description: 'Filling the void left by bootcamps career services.',
-    url: 'https://careerchangers.co',
+    url: 'https://careerchangers.guide',
     siteName: 'Career Changers',
     locale: 'en-US',
     type: 'website',

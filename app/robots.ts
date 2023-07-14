@@ -5,7 +5,7 @@ export default function robots() {
         userAgent: '*',
       },
     ],
-    sitemap: 'https://careerchangers.co/sitemap.xml',
-    host: 'https://careerchangers.co',
+    sitemap: 'https://careerchangers.guide/sitemap.xml',
+    host: 'https://careerchangers.guide',
   }
 }
