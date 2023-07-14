@@ -4,7 +4,6 @@ import { auth } from 'lib/auth'
 import { type Session } from 'next-auth'
 import { queryBuilder } from 'lib/planetscale'
 import { revalidatePath } from 'next/cache'
-import { invariant } from 'framer-motion'
 
 export async function increment(slug: string) {
   const data = await queryBuilder
@@ -31,7 +30,7 @@ async function getSession(): Promise<Session> {
   return session
 }
 
-export async function saveGuestbookEntry(formData: FormData) {
+export async function saveNotesEntry(formData: FormData) {
   const session = await getSession()
   const email = session.user?.email as string
   const createdBy = session.user?.name as string
@@ -39,11 +38,11 @@ export async function saveGuestbookEntry(formData: FormData) {
   const body = entry.slice(0, 500)
 
   await queryBuilder
-    .insertInto('Guestbook')
+    .insertInto('Notes')
     .values({ email, body, createdBy })
     .execute()
 
-  revalidatePath('/guestbook')
+  revalidatePath('/drop-a-note')
 }
 
 export async function collectLinkActions(formData: FormData, pathname: string) {
@@ -61,4 +60,18 @@ export async function collectLinkActions(formData: FormData, pathname: string) {
     .execute()
 
   revalidatePath(pathname)
+}
+
+export async function checkIfUserHasCollectedLink(linkName: string) {
+  const session = await getSession()
+  const collectedBy = session.user?.email as string
+
+  const data = await queryBuilder
+    .selectFrom('Link')
+    .where('collectedBy', '=', collectedBy)
+    .where('name', '=', linkName)
+    .select(['id'])
+    .execute()
+
+  return { session: !!session, data: !!data.length }
 }

@@ -1,8 +1,8 @@
 import Image from 'next/image'
-import avatar from 'app/avatar.jpg'
 import ViewCounter from 'app/blog/view-counter'
 import { getViewsCount } from 'lib/metrics'
-import hotairballoons from 'app/hotairballoons.jpg'
+import CCLogo from '/public/images/ccmainimage.png'
+import Link from 'next/link'
 
 function ArrowIcon() {
   return (
@@ -46,10 +46,10 @@ export default async function Page() {
   return (
     <section>
       <div className="my-8">
-        <div className="relative mb-4 h-52">
+        <div className="relative mb-4 h-60">
           <Image
-            alt="Me speaking on stage at React Summit about the future of Next.js"
-            src={hotairballoons}
+            alt="Career Changers Dark Logo"
+            src={CCLogo}
             fill
             sizes="(max-width: 768px) 213px, 33vw"
             priority
@@ -84,12 +84,28 @@ export default async function Page() {
           told we would get help with but we did not.
         </p>
       </div>
+      <h3 className="mb-6 text-xl font-bold tracking-tighter">
+        About the site
+      </h3>
       <div className="prose prose-neutral dark:prose-invert">
         <p>
-          There may be the occassional individual who is going through the
-          coding bootcamp to learn and not get a job. But those are the vast
-          minority of individuals. The aim of the majority going through a
-          coding bootcamp is to get a job.
+          We have a{' '}
+          <Link href="/blog" className="prose">
+            blog
+          </Link>{' '}
+          because every site must. There are also{' '}
+          <Link href="/newsletter-archives" className="prose">
+            old newsletters
+          </Link>{' '}
+          that were part of an email newsletter that have been adapted for a
+          website. And lastly we have the{' '}
+          <Link href="drop-a-note" className="prose">
+            drop-a-note
+          </Link>{' '}
+          page. This is a place you can request an article, ask a question, or
+          just drop a note to say hi. In the future there will be a resources
+          page with all the go to resources and links for things related to
+          networking and getting your first software job.
         </p>
       </div>
       {/* <div className="my-8 flex w-full flex-col space-y-4">
@@ -106,6 +122,7 @@ export default async function Page() {
           <BlogLink name="The Story of Heroku" slug="heroku" />
         </Suspense>
       </div> */}
+      <h3 className="mb-6 text-xl font-bold tracking-tighter">About me</h3>
       <div className="prose prose-neutral dark:prose-invert">
         <p>
           If you are curious about me, my name is Ben Patton. My background is

@@ -4,3 +4,8 @@
 
 [ ] - add new callout element that takes a title and content
 [ ] - as it comes up on screen it plays a fun noise
+[ ] - can I pass server functions as props?
+
+[ ] - add a user preferences table
+
+[ ] - reference the TODO's in the mdx component file for more

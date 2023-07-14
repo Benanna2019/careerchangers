@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import { useRef } from 'react';
-import { saveGuestbookEntry } from '../actions';
-import { experimental_useFormStatus as useFormStatus } from 'react-dom';
+import { useRef } from 'react'
+import { saveNotesEntry } from '../actions'
+import { experimental_useFormStatus as useFormStatus } from 'react-dom'
 
 export default function Form() {
-  const formRef = useRef<HTMLFormElement>(null);
-  const { pending } = useFormStatus();
+  const formRef = useRef<HTMLFormElement>(null)
+  const { pending } = useFormStatus()
 
   return (
     <form
@@ -14,8 +14,8 @@ export default function Form() {
       className="relative max-w-[500px] text-sm"
       ref={formRef}
       action={async (formData) => {
-        await saveGuestbookEntry(formData);
-        formRef.current?.reset();
+        await saveNotesEntry(formData)
+        formRef.current?.reset()
       }}
     >
       <input
@@ -25,15 +25,15 @@ export default function Form() {
         name="entry"
         type="text"
         required
-        className="pl-4 pr-32 py-2 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full border-neutral-300 rounded-md bg-gray-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
+        className="mt-1 block w-full rounded-md border-neutral-300 bg-gray-100 py-2 pl-4 pr-32 text-neutral-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-800 dark:text-neutral-100"
       />
       <button
-        className="flex items-center justify-center absolute right-1 top-1 px-2 py-1 font-medium h-7 bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 rounded w-16"
+        className="absolute right-1 top-1 flex h-7 w-16 items-center justify-center rounded bg-neutral-200 px-2 py-1 font-medium text-neutral-900 dark:bg-neutral-700 dark:text-neutral-100"
         disabled={pending}
         type="submit"
       >
         Sign
       </button>
     </form>
-  );
+  )
 }

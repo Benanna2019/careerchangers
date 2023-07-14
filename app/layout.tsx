@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import Sidebar from './components/sidebar'
+import { RQProviders } from './components/rq-providers'
 import { Analytics } from '@vercel/analytics/react'
 
 const graphik = localFont({
@@ -66,7 +67,7 @@ export default function RootLayout({
       <body className="mb-40 flex flex-col antialiased md:flex-row ">
         <main className="mx-auto mt-8 flex max-w-2xl flex-auto flex-col px-2 md:px-0">
           <Sidebar />
-          {children}
+          <RQProviders>{children}</RQProviders>
           {/* <Analytics /> */}
         </main>
       </body>

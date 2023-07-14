@@ -2,7 +2,7 @@
 import { Generated, Kysely } from 'kysely'
 import { PlanetScaleDialect } from 'kysely-planetscale'
 
-interface GuestbookTable {
+interface NotesTable {
   id: Generated<number>
   email: string
   body: string
@@ -23,7 +23,7 @@ interface LinkTable {
 }
 
 interface Database {
-  Guestbook: GuestbookTable
+  Notes: NotesTable
   Views: ViewsTable
   Link: LinkTable
 }

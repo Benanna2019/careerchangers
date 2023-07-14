@@ -6,10 +6,12 @@ export default async function sitemap() {
     lastModified: post.publishedAt,
   }))
 
-  const routes = ['', '/blog', '/guestbook'].map((route) => ({
-    url: `https://careerchangers.co${route}`,
-    lastModified: new Date().toISOString().split('T')[0],
-  }))
+  const routes = ['', '/blog', '/drop-a-note', '/newsletter-archives'].map(
+    (route) => ({
+      url: `https://careerchangers.co${route}`,
+      lastModified: new Date().toISOString().split('T')[0],
+    })
+  )
 
   return [...routes, ...blogs]
 }

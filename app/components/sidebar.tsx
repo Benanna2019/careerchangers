@@ -15,12 +15,18 @@ const navItems = {
   '/drop-a-note': {
     name: 'drop a note',
   },
+  '/newsletter-archives': {
+    name: 'newsletter archives',
+  },
 }
 
 export default function Navbar() {
   let pathname = usePathname() || '/'
   if (pathname.includes('/blog/')) {
     pathname = '/blog'
+  }
+  if (pathname.includes('/newsletter-archives/')) {
+    pathname = '/newsletter-archives'
   }
 
   return (

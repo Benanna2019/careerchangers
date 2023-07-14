@@ -15,11 +15,16 @@ import {
 import { experimental_useFormStatus as useFormStatus } from 'react-dom'
 import { usePathname } from 'next/navigation'
 
-import { collectLinkActions, saveGuestbookEntry } from 'app/actions'
+import {
+  collectLinkActions,
+  saveNotesEntry,
+  checkIfUserHasCollectedLink,
+} from 'app/actions'
+import { useQuery } from '@tanstack/react-query'
 
 export const actionsLookupObject = {
   'collect-link': collectLinkActions,
-  'save-guestbook-entry': saveGuestbookEntry,
+  'save-guestbook-entry': saveNotesEntry,
 }
 
 const CustomLink = (props) => {
@@ -56,23 +61,54 @@ function Callout(props) {
 function LinkedInCallout(props: LinkedInProps) {
   return (
     <>
-      <div className="mb-8 flex items-center rounded border border-neutral-200 bg-neutral-50 p-1 px-4 py-3 text-sm text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
-        <h3 className="text-xl uppercase">Linkedin</h3>
-        <h2 className="text-2xl">{props.title}</h2>
-        <div className="my-6">
-          <div className="relative mb-4 h-52">
-            <Image
-              alt="Me speaking on stage at React Summit about the future of Next.js"
-              src="https://images.unsplash.com/photo-1611944212129-29977ae1398c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bGlua2VkaW58ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
-              fill
-              sizes="(max-width: 768px) 213px, 33vw"
-              priority
-              className="rounded-lg object-cover"
-            />
-          </div>
+      <div className="mb-8 flex flex-col items-center rounded border border-neutral-200 bg-neutral-50 p-1 px-4 py-3 text-sm text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+        <div className="flex w-full flex-col justify-start">
+          <h3 className="text-xl uppercase text-blue-500">LinkedIn</h3>
+          <h2 className="text-2xl">Weekly LinkedIn Tip</h2>
         </div>
-        <div className="mb-8 flex items-center rounded border border-neutral-200 bg-neutral-50 p-1 px-4 py-3 text-sm text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
-          <div className="callout w-full">{props.children}</div>
+        <div className="my-6">
+          <RoundedImage
+            alt="LinkedIn Headline"
+            src="https://images.unsplash.com/photo-1611944212129-29977ae1398c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bGlua2VkaW58ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
+            width={1600}
+            height={840}
+          />
+        </div>
+        <div className="mb-8 flex items-center rounded py-3 text-base text-neutral-900 dark:text-neutral-100">
+          <div className="w-full">{props.children}</div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+function SignOff(props: {
+  image: string
+  photoBy?: string
+  description?: string
+}) {
+  return (
+    <>
+      <div className="mb-8 flex flex-col items-center rounded p-1 px-4 py-3 text-sm text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+        <div className="flex w-full flex-col justify-center">
+          <h3 className="self-center text-2xl uppercase">Till Next Time</h3>
+        </div>
+        <div className="my-6">
+          <RoundedImage
+            alt="Sign Off"
+            src={props.image}
+            width={1600}
+            height={840}
+          />
+        </div>
+        <div className="mb-8 flex items-center rounded py-3 text-base text-neutral-900 dark:text-neutral-100">
+          <div className="w-full text-center">
+            {props.photoBy
+              ? `Photo By:  ${props.photoBy}`
+              : props.description
+              ? props.description
+              : null}
+          </div>
         </div>
       </div>
     </>
@@ -84,6 +120,39 @@ function CollectLinkPopUp(props: CollectionLinkPopUpProps) {
   const formRef = React.useRef<HTMLFormElement>(null)
   const { pending } = useFormStatus()
   const pathname = usePathname()
+
+  // All of this is simple for styling the link.
+  // TODOS:
+  // [ ] - If there is no data, closing the dialog should, on first renderthe button should read, collect link.
+  // [ ] - if there is data, meaning the user has this link already, the button should read 'continue reading'
+  // [ ] - get total amount of links from db for a given blog post - DO THIS ON THE BLOG POST PAGE IN THE SERVER COMPONENT
+  // [ ] - check if user has collected links that match on the blog post slug
+  // [ ] - display a 'links collected' metric with something like 'links collected: 1/3'
+  // [ ] - if the user doesn't have a specific link, the button should read 'collect link' and the server action is active
+  // [ ] - if the user has collected the specific link, the button should read 'continue reading' and just close the dialog
+
+  // NOTES:
+  // Last primary thing to figure out is skipping the server action if there is data
+  // That will mean that there the current user has already collected this link
+
+  // I would have to do some fancy merging magic but it would be possible to, when I create the blog post
+  // and when I add one of these link popups to the mdx, I can make sure I have a total amount of 'links on this page'
+  // Then when I load the page, get that number, and then query the links table for the current user
+  // and where the pathname of the blog post matches user and pathname in the db, get the total amount of links there.
+  // The just have a 'collectedLinks: x/totalLinks' either in state/as a display
+
+  const { data, isLoading, isError } = useQuery(
+    ['link', props.serverAction],
+    () =>
+      fetch(`/api/links/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(props.serverAction),
+      }).then((res) => res.json())
+  )
+
   return (
     <>
       <Dialog>
@@ -115,23 +184,21 @@ function CollectLinkPopUp(props: CollectionLinkPopUpProps) {
 function NetworkingCallout(props: NetworkingProps) {
   return (
     <>
-      <div className="mb-8 flex items-center rounded border border-neutral-200 bg-neutral-50 p-1 px-4 py-3 text-sm text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
-        <h3 className="text-xl uppercase">Networking</h3>
-        <h2 className="text-2xl">{props.title}</h2>
-        <div className="my-6">
-          <div className="relative mb-4 h-52">
-            <Image
-              alt="Me speaking on stage at React Summit about the future of Next.js"
-              src={props.image || fallbackNetworkingUrl}
-              fill
-              sizes="(max-width: 768px) 213px, 33vw"
-              priority
-              className="rounded-lg object-cover"
-            />
-          </div>
+      <div className="mb-8 flex flex-col items-center rounded border border-neutral-200 bg-neutral-50 p-1 px-4 py-3 text-sm text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+        <div className="flex w-full flex-col justify-start">
+          <h3 className="text-xl uppercase text-blue-500">Networking</h3>
+          <h2 className="text-2xl">{props.title}</h2>
         </div>
-        <div className="mb-8 flex items-center rounded border border-neutral-200 bg-neutral-50 p-1 px-4 py-3 text-sm text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
-          <div className="callout w-full">{props.children}</div>
+        <div className="my-6">
+          <RoundedImage
+            alt="Networking Headline"
+            src={props.image || fallbackNetworkingUrl}
+            width={1600}
+            height={840}
+          />
+        </div>
+        <div className=" mb-8 flex items-center rounded py-3 text-base text-neutral-900 dark:text-neutral-100">
+          <div className="w-full">{props.children}</div>
         </div>
       </div>
     </>
@@ -201,6 +268,7 @@ const components = {
   LinkedInCallout,
   NetworkingCallout,
   CollectLinkPopUp,
+  SignOff,
 }
 
 interface MdxProps {
@@ -217,14 +285,14 @@ export function Mdx({ code }: MdxProps) {
   )
 }
 
-interface LinkedInProps {
+type LinkedInProps = {
   title: string
   children: React.ReactNode
   popup?: boolean // need to look up the element type cause it will be link that when clicks opens a modal
   popup_content?: React.ReactNode // this will be the shadui modal
 }
 
-interface NetworkingProps {
+type NetworkingProps = {
   title: string
   children: React.ReactNode
   image?: string

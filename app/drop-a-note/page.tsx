@@ -4,9 +4,9 @@ import { queryBuilder } from 'lib/planetscale'
 import { SignIn, SignOut } from './buttons'
 import Form from './form'
 
-async function getGuestbook() {
+async function getNotes() {
   const data = await queryBuilder
-    .selectFrom('Guestbook')
+    .selectFrom('Notes')
     .select(['id', 'body', 'createdBy', 'updatedAt'])
     .orderBy('updatedAt', 'desc')
     .limit(100)
@@ -16,27 +16,27 @@ async function getGuestbook() {
 }
 
 export const metadata: Metadata = {
-  title: 'Guestbook',
-  description: 'Sign my guestbook and leave your mark.',
+  title: 'Drop a Note',
+  description: 'Request a blog post, leave a note, or just say hi.',
 }
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'edge'
 
-export default async function GuestbookPage() {
+export default async function DropANotePage() {
   let entries
   let session
 
   try {
-    const [guestbookRes, sessionRes] = await Promise.allSettled([
-      getGuestbook(),
+    const [notesRes, sessionRes] = await Promise.allSettled([
+      getNotes(),
       auth(),
     ])
 
-    if (guestbookRes.status === 'fulfilled' && guestbookRes.value[0]) {
-      entries = guestbookRes.value
+    if (notesRes.status === 'fulfilled' && notesRes.value[0]) {
+      entries = notesRes.value
     } else {
-      console.error(guestbookRes)
+      console.error(notesRes)
     }
 
     if (sessionRes.status === 'fulfilled') {
